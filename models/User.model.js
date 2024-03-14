@@ -3,6 +3,10 @@ const { Schema, model } = require("mongoose");
 // TODO: Please make sure you edit the User model to whatever makes sense in this case
 const userSchema = new Schema(
   {
+    profileImage: {
+      type: String,
+      default: "https://vectorified.com/images/avatar-icon-png-13.png",
+    },
     firstName: {
       type: String,
       required: true,
@@ -45,7 +49,7 @@ const userSchema = new Schema(
     },
     favouriteAlbums: [{ type: Schema.Types.ObjectId, ref: "Album" }],
     reviews: [{ type: Schema.Types.ObjectId, ref: "Review" }],
-    orders: [{type: Schema.Types.ObjectId, ref: "Order"}],
+    orders: [{ type: Schema.Types.ObjectId, ref: "Order" }],
   },
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`
