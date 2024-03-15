@@ -34,12 +34,10 @@ router.post("/signup", (req, res, next) => {
   // Checking password format with regex
   const passwordRegex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/;
   if (!passwordRegex.test(password)) {
-    res
-      .status(400)
-      .json({
-        message:
-          "Password must have at least 8 characters and contain at least one number, one lowercase and one uppercase letter.",
-      });
+    res.status(400).json({
+      message:
+        "Password must have at least 8 characters and contain at least one number, one lowercase and one uppercase letter.",
+    });
     return;
   }
 
@@ -52,7 +50,7 @@ router.post("/signup", (req, res, next) => {
         return;
       }
 
-      // If the email is unique, proceed to hash the password
+      // If the email and username are unique, proceed to hash the password
       const salt = bcrypt.genSaltSync(saltRounds);
       const hashedPassword = bcrypt.hashSync(password, salt);
 
@@ -74,8 +72,14 @@ router.post("/signup", (req, res, next) => {
       // Create a new object that doesn't expose the password
       const newUser = { firstName, lastName, username, email, _id };
 
+      // Create and sign the token
+      const authToken = jwt.sign(newUser, process.env.TOKEN_SECRET, {
+        algorithm: "HS256",
+        expiresIn: "6h",
+      });
+
       // Send a json response containing the user object
-      res.status(201).json({ user: newUser });
+      res.status(201).json({ authToken });
     })
     .catch((err) => {
       console.log(err);
