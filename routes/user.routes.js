@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const Album = require("../models/Album.model");
 const User = require("../models/User.model");
 
-//GET Route /api/users -> none -> display all the users from database
+//GET Route /api/users -> ADMIN -> display all the users from database
 router.get("/users", (req, res, next) => {
   User.find()
     .then((allUsers) => {
@@ -16,7 +16,7 @@ router.get("/users", (req, res, next) => {
     });
 });
 
-//POST Route /api/users -> JSON -> send data to add a new user in the database
+//POST Route /api/users -> JSON -> ADMIN -> send data to add a new user in the database
 router.post("/users", (req, res, next) => {
   const { firstName, lastName, username, email, password } = req.body;
 
@@ -28,7 +28,7 @@ router.post("/users", (req, res, next) => {
     });
 });
 
-//PUT Route /api/users/:userId -> JSON -> update specific user’s information
+//PUT Route /api/users/:userId -> JSON -> ADMIN -> update specific user’s information
 router.put("/users/:userId", (req, res, next) => {
   const { userId } = req.params;
 
@@ -61,6 +61,12 @@ router.get("/profile", isAuthenticated, (req, res, next) => {
 router.get("/users/:userId", (req, res, next) => {
   const { userId } = req.params;
 
+  if (!mongoose.Types.ObjectId.isValid(userId)) {
+    res.status(400).json({ message: "Specified id is not valid" });
+    return;
+  }
+
+  User.findById(userId)
   if (!mongoose.Types.ObjectId.isValid(userId)) {
     res.status(400).json({ message: "Specified id is not valid" });
     return;
