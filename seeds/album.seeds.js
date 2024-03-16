@@ -9,7 +9,7 @@ const albums = [
     {albumImage: "https://i.scdn.co/image/ab67616d0000b273dbb3dd82da45b7d7f31b1b42", albumName: "The Marshall Matters LP", artistsNames: ["Eminem"]}
   ];
 
-const MONGO_URI = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/Grooveix-server";
+const MONGO_URI = process.env.MONGODB_URI || "mongodb+srv://omayma_elhadari:nZxTZ97DRBycGgZf@cluster0.aeaoh2h.mongodb.net/grooveix-server";
 
   mongoose
     .connect(MONGO_URI)

@@ -45,6 +45,7 @@ const userSchema = new Schema(
     },
     role: {
       type: String,
+      default: "client",
       enum: ["admin", "client"],
     },
     favouriteAlbums: [{ type: Schema.Types.ObjectId, ref: "Album" }],

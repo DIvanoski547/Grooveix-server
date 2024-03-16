@@ -2,7 +2,7 @@ const { Schema, model } = require("mongoose");
 
 
 const albumSchema = new Schema({
-  albumImage: { type:String, unique:true },
+  albumImage: { type:String },
   albumName: { type: String, required: true},
   artistsNames: [String], // artist page retrieved from spotify API
   // tracks: [

@@ -11,7 +11,7 @@ const users = [
 {firstName:"Jack", lastName:"Sparrow", username:"jacksparrow", email:"jacksparrow@email.com", password:"Jack1234" },
   ];
 
-const MONGO_URI = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/Grooveix-server";
+const MONGO_URI = process.env.MONGODB_URI || "mongodb+srv://omayma_elhadari:nZxTZ97DRBycGgZf@cluster0.aeaoh2h.mongodb.net/grooveix-server";
 
   mongoose
     .connect(MONGO_URI)

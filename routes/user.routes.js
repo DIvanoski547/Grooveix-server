@@ -44,11 +44,18 @@ router.put("/users/:userId", (req, res, next) => {
       res.status(500).json({ message: "error while updating user" });
     });
 });
+
 //GET Route /api/profile ---> none ---> display current user info
-router.get("/api/profile", isAuthenticated, (req, res, next) => {
-    const {profile} = 
-    User.findById({isAuthenticated})
-})
+router.get("/profile", isAuthenticated, (req, res, next) => {
+    console.log("payload", req.payload)
+   
+    User.findById(req.payload._id)
+        .then((loggedUser) => res.status(200).json(loggedUser))
+        .catch((err) => {
+            console.log("error while retrieving user", err);
+            res.status(500).json({ message: "error while retrieving user" })
+        });
+});
 
 
 //GET Route /api/users/:userId ---> none ---> displays specific user info profile by id ---> you must be the admin user
