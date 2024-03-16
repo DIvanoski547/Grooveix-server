@@ -28,7 +28,7 @@ router.post("/albums", (req, res, next) => {
     });
 });
 
-//GET Route /api/albums/:albumId ->  show one specific album
+//GET Route /api/albums/:albumId ->  show one specific album with its reviews 
 router.get("/albums/:albumId", (req, res, next) => {
   const { albumId } = req.params;
 
@@ -37,7 +37,8 @@ router.get("/albums/:albumId", (req, res, next) => {
     return;
   }
 
-  Album.findById(albumId)
+    Album.findById(albumId)
+      .populate("reviews")
     .then((oneAlbum) => res.status(200).json(oneAlbum))
     .catch((err) => {
       console.log("error while retrieving album", err);
@@ -45,7 +46,7 @@ router.get("/albums/:albumId", (req, res, next) => {
     });
 });
 
-//PUT Route /api/albums/:albumId -> update one specific album
+//PUT Route/albums/:albumId -> update one specific album
 router.put("/albums/:albumId", (req, res, next) => {
   const { albumId } = req.params;
 
@@ -62,7 +63,7 @@ router.put("/albums/:albumId", (req, res, next) => {
     });
 });
 
-//DELETE Route /api/albums/:albumId -> delete one specific album
+//DELETE Route /albums/:albumId -> delete one specific album
 router.delete("/albums/:albumId", (req, res, next) => {
   const { albumId } = req.params;
 
@@ -82,5 +83,6 @@ router.delete("/albums/:albumId", (req, res, next) => {
       res.status(500).json({ message: "error while deleting album" });
     });
 });
+
 
 module.exports = router;
