@@ -34,12 +34,10 @@ router.post("/signup", (req, res, next) => {
   // Checking password format with regex
   const passwordRegex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/;
   if (!passwordRegex.test(password)) {
-    res
-      .status(400)
-      .json({
-        message:
-          "Password must have at least 8 characters and contain at least one number, one lowercase and one uppercase letter.",
-      });
+    res.status(400).json({
+      message:
+        "Password must have at least 8 characters and contain at least one number, one lowercase and one uppercase letter.",
+    });
     return;
   }
 
@@ -107,7 +105,7 @@ router.post("/login", (req, res, next) => {
 
       if (passwordCorrect) {
         // Deconstruct the user object to omit the password
-        const { _id, firstName, lastName, username, email, role} = foundUser;
+        const { _id, firstName, lastName, username, email, role } = foundUser;
 
         // Create an object that will be set as the token payload
         const payload = { _id, firstName, lastName, username, email, role };

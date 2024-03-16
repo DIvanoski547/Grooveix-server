@@ -47,32 +47,31 @@ router.put("/users/:userId", (req, res, next) => {
 
 //GET Route /api/profile ---> none ---> display current user info
 router.get("/profile", isAuthenticated, (req, res, next) => {
-    console.log("payload", req.payload)
-   
-    User.findById(req.payload._id)
-        .then((loggedUser) => res.status(200).json(loggedUser))
-        .catch((err) => {
-            console.log("error while retrieving user", err);
-            res.status(500).json({ message: "error while retrieving user" })
-        });
-});
+  console.log("payload", req.payload);
 
+  User.findById(req.payload._id)
+    .then((loggedUser) => res.status(200).json(loggedUser))
+    .catch((err) => {
+      console.log("error while retrieving user", err);
+      res.status(500).json({ message: "error while retrieving user" });
+    });
+});
 
 //GET Route /api/users/:userId ---> none ---> displays specific user info profile by id ---> you must be the admin user
 router.get("/users/:userId", (req, res, next) => {
-    const { userId } = req.params;
+  const { userId } = req.params;
 
-    if (!mongoose.Types.ObjectId.isValid(userId)) {
-        res.status(400).json({ message: "Specified id is not valid" });
-        return;
-    }
-    
-    User.findById(userId)
+  if (!mongoose.Types.ObjectId.isValid(userId)) {
+    res.status(400).json({ message: "Specified id is not valid" });
+    return;
+  }
+
+  User.findById(userId)
     .then((oneUser) => res.status(200).json(oneUser))
     .catch((err) => {
-        console.log("error while retrieving user", err);
-        res.status(500).json({message: "error while retrieving user"})
-     });
-})
+      console.log("error while retrieving user", err);
+      res.status(500).json({ message: "error while retrieving user" });
+    });
+});
 
 module.exports = router;

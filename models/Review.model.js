@@ -8,7 +8,7 @@ const reviewSchema = new Schema(
     },
     album: {
       type: Schema.Types.ObjectId,
-      ref: "Album"
+      ref: "Album",
     },
     rating: {
       type: Number,
