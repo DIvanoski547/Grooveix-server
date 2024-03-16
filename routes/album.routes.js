@@ -1,11 +1,12 @@
 const router = require("express").Router();
-const { isAuthenticated } = require("../middleware/jwt.middleware");
+const { isAuthenticated, isAdmin } = require("../middleware/jwt.middleware");
 const mongoose = require("mongoose");
 const Album = require("../models/Album.model");
 const User = require("../models/User.model");
+const Review = require("../models/Review.model");
 
 //GET Route /api/albums -> show all albums
-router.get("/albums", (req, res, next) => {
+router.get("/albums", isAuthenticated, (req, res, next) => {
   Album.find()
     .then((allAlbums) => {
       res.json(allAlbums);
@@ -17,7 +18,7 @@ router.get("/albums", (req, res, next) => {
 });
 
 //POST Route /api/albums -> add new album to the data base
-router.post("/albums", (req, res, next) => {
+router.post("/albums", isAuthenticated, isAdmin, (req, res, next) => {
   const { albumImage, albumName, artistsNames } = req.body;
 
   Album.create({ albumImage, albumName, artistsNames, reviews: [] })
@@ -29,7 +30,7 @@ router.post("/albums", (req, res, next) => {
 });
 
 //GET Route /api/albums/:albumId ->  show one specific album with its reviews 
-router.get("/albums/:albumId", (req, res, next) => {
+router.get("/albums/:albumId", isAuthenticated, (req, res, next) => {
   const { albumId } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(albumId)) {
@@ -47,7 +48,7 @@ router.get("/albums/:albumId", (req, res, next) => {
 });
 
 //PUT Route/albums/:albumId -> update one specific album
-router.put("/albums/:albumId", (req, res, next) => {
+router.put("/albums/:albumId", isAuthenticated, isAdmin, (req, res, next) => {
   const { albumId } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(albumId)) {
@@ -64,7 +65,7 @@ router.put("/albums/:albumId", (req, res, next) => {
 });
 
 //DELETE Route /albums/:albumId -> delete one specific album
-router.delete("/albums/:albumId", (req, res, next) => {
+router.delete("/albums/:albumId", isAuthenticated, isAdmin, (req, res, next) => {
   const { albumId } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(albumId)) {

@@ -1,11 +1,11 @@
 const router = require("express").Router();
-const { isAuthenticated } = require("../middleware/jwt.middleware");
+const { isAuthenticated, isAdmin } = require("../middleware/jwt.middleware");
 const mongoose = require("mongoose");
 const Album = require("../models/Album.model");
 const User = require("../models/User.model");
 
 //GET Route /api/users -> ADMIN -> display all the users from database
-router.get("/users", (req, res, next) => {
+router.get("/users", isAuthenticated, isAdmin, (req, res, next) => {
   User.find()
     .then((allUsers) => {
       res.json(allUsers);
@@ -17,7 +17,7 @@ router.get("/users", (req, res, next) => {
 });
 
 //POST Route /api/users -> JSON -> ADMIN -> send data to add a new user in the database
-router.post("/users", (req, res, next) => {
+router.post("/users", isAuthenticated, isAdmin, (req, res, next) => {
   const { firstName, lastName, username, email, password } = req.body;
 
   User.create({ firstName, lastName, username, email, password })
@@ -29,7 +29,7 @@ router.post("/users", (req, res, next) => {
 });
 
 //PUT Route /api/users/:userId -> JSON -> ADMIN -> update specific user’s information
-router.put("/users/:userId", (req, res, next) => {
+router.put("/users/:userId", isAuthenticated, isAdmin, (req, res, next) => {
   const { userId } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(userId)) {
@@ -58,7 +58,7 @@ router.get("/profile", isAuthenticated, (req, res, next) => {
 });
 
 //GET Route /api/users/:userId ---> none ---> displays specific user info profile by id ---> you must be the admin user
-router.get("/users/:userId", (req, res, next) => {
+router.get("/users/:userId", isAuthenticated, isAdmin, (req, res, next) => {
   const { userId } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(userId)) {
