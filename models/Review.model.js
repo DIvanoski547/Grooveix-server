@@ -6,7 +6,7 @@ const reviewSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "User",
     },
-    album: {
+    album: {                            // -> should change the name from "album" to "albumId", better readable code
       type: Schema.Types.ObjectId,
       ref: "Album",
     },

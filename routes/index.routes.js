@@ -7,6 +7,4 @@ router.get("/", isAuthenticated, (req, res, next) => {
 
 // GET → /startPage → Show starter page for every user.
 
-// GET → / → isLoggedIn → Show homepage if user is signed in.
-
 module.exports = router;

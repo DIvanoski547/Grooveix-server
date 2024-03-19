@@ -23,7 +23,7 @@ function getTokenFromHeaders(req) {
   return null;
 }
 
-const isAdmin = (req, res, next) => {
+const isAdmin = (req, res, next) => {                                       // -> redirect user to the 404 page with button to go on homepage/back
   if (req.payload.role != "admin") {
     return res.status(404).json({ message: "Admin rights needed" });
   }

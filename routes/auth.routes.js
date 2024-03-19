@@ -75,7 +75,7 @@ router.post("/signup", (req, res, next) => {
       // Create and sign the token
       const authToken = jwt.sign(newUser, process.env.TOKEN_SECRET, {
         algorithm: "HS256",
-        expiresIn: "6h",
+        expiresIn: "2h",
       });
 
       // Send a json response containing the user object
