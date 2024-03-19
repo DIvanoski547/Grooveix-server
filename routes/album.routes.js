@@ -29,7 +29,7 @@ router.post("/albums", isAuthenticated, isAdmin, (req, res, next) => {
     });
 });
 
-//GET Route /api/albums/:albumId ->  show one specific album with its reviews 
+//GET Route /api/albums/:albumId ->  show one specific album with its reviews
 router.get("/albums/:albumId", isAuthenticated, (req, res, next) => {
   const { albumId } = req.params;
 
@@ -38,8 +38,8 @@ router.get("/albums/:albumId", isAuthenticated, (req, res, next) => {
     return;
   }
 
-    Album.findById(albumId)
-      .populate("reviews")
+  Album.findById(albumId)
+    .populate("reviews")
     .then((oneAlbum) => res.status(200).json(oneAlbum))
     .catch((err) => {
       console.log("error while retrieving album", err);
@@ -65,25 +65,29 @@ router.put("/albums/:albumId", isAuthenticated, isAdmin, (req, res, next) => {
 });
 
 //DELETE Route /albums/:albumId -> delete one specific album
-router.delete("/albums/:albumId", isAuthenticated, isAdmin, (req, res, next) => {
-  const { albumId } = req.params;
+router.delete(
+  "/albums/:albumId",
+  isAuthenticated,
+  isAdmin,
+  (req, res, next) => {
+    const { albumId } = req.params;
 
-  if (!mongoose.Types.ObjectId.isValid(albumId)) {
-    res.status(400).json({ message: "Specified id is not valid" });
-    return;
+    if (!mongoose.Types.ObjectId.isValid(albumId)) {
+      res.status(400).json({ message: "Specified id is not valid" });
+      return;
+    }
+
+    Album.findByIdAndDelete(albumId)
+      .then(() =>
+        res.json({
+          message: `Album with ${albumId} is removed successfully.`,
+        })
+      )
+      .catch((err) => {
+        console.log("error while deleting album", err);
+        res.status(500).json({ message: "error while deleting album" });
+      });
   }
-
-  Album.findByIdAndDelete(albumId)
-    .then(() =>
-      res.json({
-        message: `Album with ${albumId} is removed successfully.`,
-      })
-    )
-    .catch((err) => {
-      console.log("error while deleting album", err);
-      res.status(500).json({ message: "error while deleting album" });
-    });
-});
-
+);
 
 module.exports = router;
