@@ -5,7 +5,7 @@ const Album = require("../models/Album.model");
 const User = require("../models/User.model");
 
 //GET Route /api/users -> ADMIN -> display all the users from database
-router.get("/users", isAuthenticated, isAdmin, (req, res, next) => {
+router.get("/all-users", isAuthenticated, isAdmin, (req, res, next) => {
   User.find()
     .then((allUsers) => {
       res.json(allUsers);
@@ -17,7 +17,7 @@ router.get("/users", isAuthenticated, isAdmin, (req, res, next) => {
 });
 
 //POST Route /api/users -> JSON -> ADMIN -> send data to add a new user in the database
-router.post("/users", isAuthenticated, isAdmin, (req, res, next) => {
+router.post("/all-users", isAuthenticated, isAdmin, (req, res, next) => {
   const { firstName, lastName, username, email, password } = req.body;
 
   User.create({ firstName, lastName, username, email, password })
@@ -29,7 +29,7 @@ router.post("/users", isAuthenticated, isAdmin, (req, res, next) => {
 });
 
 //PUT Route /api/users/:userId -> JSON -> ADMIN -> update specific user’s information
-router.put("/users/:userId", isAuthenticated, isAdmin, (req, res, next) => {
+router.put("/all-users/:userId", isAuthenticated, isAdmin, (req, res, next) => {
   const { userId } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(userId)) {
@@ -66,7 +66,7 @@ router.get("/users/:userId", isAuthenticated, isAdmin, (req, res, next) => {
     return;
   }
 
-  User.findById(userId)
+  User.findById(userId);
   if (!mongoose.Types.ObjectId.isValid(userId)) {
     res.status(400).json({ message: "Specified id is not valid" });
     return;
