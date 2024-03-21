@@ -19,7 +19,7 @@ const indexRoutes = require("./routes/index.routes");
 app.use("/api", indexRoutes);
 
 const authRoutes = require("./routes/auth.routes");
-app.use("/api", authRoutes);
+app.use("/auth", authRoutes);
 
 const albumRoutes = require("./routes/album.routes");
 app.use("/api", albumRoutes);

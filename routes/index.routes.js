@@ -8,7 +8,7 @@ const User = require("../models/User.model");
 //import cloudinary configuration
 const fileUploader = require("../config/cloudinary.config");
 
-router.get("/", isAuthenticated, (req, res, next) => {
+router.get("/", (req, res, next) => {
   res.json("All good in here");
 });
 
