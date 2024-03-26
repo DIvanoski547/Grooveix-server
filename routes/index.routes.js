@@ -13,7 +13,7 @@ router.get("/", (req, res, next) => {
 });
 
 //POST route for sending file path
-router.post("/image-upload", fileUploader.single("image"), (req, res) => {
+router.post("/profile/image-upload", fileUploader.single("image"), (req, res) => {
   if (!req.file) {
     next(new Error("No file uploaded!"));
     return;
@@ -23,12 +23,12 @@ router.post("/image-upload", fileUploader.single("image"), (req, res) => {
 });
 
 //GET route to retrieve authenticated user's information
-router.get("/users", isAuthenticated, (req, res) => {
-  res.status(200).json(req.payload);
-});
+// router.get("/profile", isAuthenticated, (req, res) => {
+//   res.status(200).json(req.payload);
+// });
 
 //PUT route to update user's information and add the new file as profile image
-router.put("/users", (req, res) => {
+router.put("/profile", (req, res) => {
   const { _id, image } = req.body;
 
   User.findByIdAndUpdate(_id, { profileImage: image }, { new: true }).then(
