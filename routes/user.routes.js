@@ -65,22 +65,22 @@ router.get("/:userId", isAuthenticated, isAdmin, (req, res, next) => {
     });
 });
 
-//PUT Route /users/:userId -> JSON -> ADMIN -> update specific user’s information
-router.put("/:userId", isAuthenticated, isAdmin, (req, res, next) => {
-  const { userId } = req.params;
+// //PUT Route /users/:userId -> JSON -> ADMIN -> update specific user’s information
+// router.put("/:userId", isAuthenticated, isAdmin, (req, res, next) => {
+//   const { userId } = req.params;
 
-//   if (!mongoose.Types.ObjectId.isValid(userId)) {
-//     res.status(400).json({ message: "Specified id is not valid" });
-//     return;
-//   }
+// //   if (!mongoose.Types.ObjectId.isValid(userId)) {
+// //     res.status(400).json({ message: "Specified id is not valid" });
+// //     return;
+// //   }
 
-//   User.findByIdAndUpdate(userId, req.body, { new: true })
-//     .then((updatedUser) => res.json(updatedUser))
-//     .catch((err) => {
-//       console.log("error while updating user", err);
-//       res.status(500).json({ message: "error while updating user" });
-//     });
-// });
+// //   User.findByIdAndUpdate(userId, req.body, { new: true })
+// //     .then((updatedUser) => res.json(updatedUser))
+// //     .catch((err) => {
+// //       console.log("error while updating user", err);
+// //       res.status(500).json({ message: "error while updating user" });
+// //     });
+// // });
 
 //GET Route /users/profile ---> none ---> display current user info
 router.get("/profile", isAuthenticated, (req, res, next) => {
