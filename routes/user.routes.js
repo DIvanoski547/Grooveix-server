@@ -23,7 +23,7 @@ router.post(
 );
 
 //GET Route /users -> ADMIN -> display all the users from database
-router.get("/users", isAuthenticated, isAdmin, (req, res, next) => {
+router.get("/", isAuthenticated, isAdmin, (req, res, next) => {
   User.find()
     .then((allUsers) => {
       res.json(allUsers);
