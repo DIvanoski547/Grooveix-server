@@ -41,12 +41,20 @@ router.post("/signup", (req, res, next) => {
     return;
   }
 
-  // Check the users collection if a user with the same email already exists
-  User.findOne({ email, username })
+  // Check the users collection if a user with the same email or username already exists
+  User.findOne({ email })
     .then((foundUser) => {
       // If the user with the same email already exists, send an error response
       if (foundUser) {
-        res.status(400).json({ message: "User already exists." });
+        res.status(400).json({ message: "This email adress seems to be already in use by another profile. Please use a different email adress." });
+        return;
+      }
+    });
+    User.findOne({ username })
+    .then((foundUser) => {
+      // If the user with the same email already exists, send an error response
+      if (foundUser) {
+        res.status(400).json({ message: "Username already in use. Please use a different username" });
         return;
       }
 
@@ -67,19 +75,20 @@ router.post("/signup", (req, res, next) => {
     .then((createdUser) => {
       // Deconstruct the newly created user object to omit the password
       // We should never expose passwords publicly
-      const { firstName, lastName, username, email, _id } = createdUser;
+      const { firstName, lastName, username, email, _id } =
+        createdUser;
 
       // Create a new object that doesn't expose the password
-      const newUser = { firstName, lastName, username, email, _id };
-
-      // Create and sign the token
-      const authToken = jwt.sign(newUser, process.env.TOKEN_SECRET, {
-        algorithm: "HS256",
-        expiresIn: "2h",
-      });
+      const newUser = {
+        firstName,
+        lastName,
+        username,
+        email,
+        _id
+      };
 
       // Send a json response containing the user object
-      res.status(201).json({ authToken });
+      res.status(201).json({user: newUser});
     })
     .catch((err) => {
       console.log(err);
@@ -111,10 +120,28 @@ router.post("/login", (req, res, next) => {
 
       if (passwordCorrect) {
         // Deconstruct the user object to omit the password
-        const { _id, firstName, lastName, username, email, role } = foundUser;
+        const {
+          _id,
+          profileImage,
+          firstName,
+          lastName,
+          username,
+          email,
+          role,
+          reviews
+        } = foundUser;
 
         // Create an object that will be set as the token payload
-        const payload = { _id, firstName, lastName, username, email, role };
+        const payload = {
+          _id,
+          profileImage,
+          firstName,
+          lastName,
+          username,
+          email,
+          role,
+          reviews
+        };
         console.log("payload", payload);
 
         // Create and sign the token
