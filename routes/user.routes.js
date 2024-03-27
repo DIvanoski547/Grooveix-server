@@ -18,7 +18,7 @@ router.post(
       next(new Error("No file uploaded!"));
       return;
     }
-    res.json({ profileImage: req.file.path });
+    res.json({ profileImageUrl: req.file.path });
   }
 );
 
@@ -94,13 +94,19 @@ router.get("/profile", isAuthenticated, (req, res, next) => {
     });
 });
 
+
+// router.get("/profile", isAuthenticated, (req, res) => {
+//   console.log('payload', req.payload)
+//   res.status(200).json(req.payload)
+
+// })
 //PUT route to update user's information and add the new file as profile image
-router.put("/profile", (req, res) => {
+router.post("/profile", isAuthenticated, (req, res, next) => {
 
-  console.log("req.body", req.body);
-  const { _id, profileImage } = req.body;
+  const {profileImage} = req.body;
+  console.log("req.body", profileImage);
 
-  User.findByIdAndUpdate(_id, { profileImage }, { new: true })
+  User.findByIdAndUpdate( req.payload._id, { profileImage}, { new: true })
     .then(
     (updatedUser) => {
       //deconstruct body
