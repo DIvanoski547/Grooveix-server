@@ -28,7 +28,7 @@ const usersRoutes = require("./routes/user.routes");
 app.use("/users", usersRoutes);
 
 const reviewRoutes = require("./routes/review.routes");
-app.use("/albums", reviewRoutes);
+app.use("/reviews", reviewRoutes);
 
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
 require("./error-handling")(app);

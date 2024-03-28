@@ -1,18 +1,19 @@
-const express = require("express");
+//import dependencies
+const router = require("express").Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+//import User model to work with it
 const User = require("../models/User.model");
-
+//import middleware
 const { isAuthenticated } = require("../middleware/jwt.middleware");
-
-const router = express.Router();
+//set salt rounds for password hashing
 const saltRounds = 10;
 
-// POST Signup Route
+// POST Signup Route /auth/signup
 router.post("/signup", (req, res, next) => {
   const { firstName, lastName, username, email, password } = req.body;
 
-  // Check if the email or password or name is provided as an empty string
+  // Check if the fields are provided as empty strings
   if (
     firstName === "" ||
     lastName === "" ||
@@ -42,19 +43,27 @@ router.post("/signup", (req, res, next) => {
   }
 
   // Check the users collection if a user with the same email or username already exists
-  User.findOne({ email })
+  User.findOne({ email }).then((foundUser) => {
+    // If the user with the same email already exists, send an error response
+    if (foundUser) {
+      res
+        .status(400)
+        .json({
+          message:
+            "This email adress seems to be already in use by another profile. Please use a different email adress.",
+        });
+      return;
+    }
+  });
+  User.findOne({ username })
     .then((foundUser) => {
       // If the user with the same email already exists, send an error response
       if (foundUser) {
-        res.status(400).json({ message: "This email adress seems to be already in use by another profile. Please use a different email adress." });
-        return;
-      }
-    });
-    User.findOne({ username })
-    .then((foundUser) => {
-      // If the user with the same email already exists, send an error response
-      if (foundUser) {
-        res.status(400).json({ message: "Username already in use. Please use a different username" });
+        res
+          .status(400)
+          .json({
+            message: "Username already in use. Please use a different username",
+          });
         return;
       }
 
@@ -75,8 +84,7 @@ router.post("/signup", (req, res, next) => {
     .then((createdUser) => {
       // Deconstruct the newly created user object to omit the password
       // We should never expose passwords publicly
-      const { firstName, lastName, username, email, _id } =
-        createdUser;
+      const { firstName, lastName, username, email, _id } = createdUser;
 
       // Create a new object that doesn't expose the password
       const newUser = {
@@ -84,11 +92,11 @@ router.post("/signup", (req, res, next) => {
         lastName,
         username,
         email,
-        _id
+        _id,
       };
 
       // Send a json response containing the user object
-      res.status(201).json({user: newUser});
+      res.status(201).json({ user: newUser });
     })
     .catch((err) => {
       console.log(err);
@@ -96,7 +104,7 @@ router.post("/signup", (req, res, next) => {
     });
 });
 
-// POST Login Route
+// POST Login Route /auth/login
 router.post("/login", (req, res, next) => {
   const { email, password } = req.body;
 
@@ -128,7 +136,7 @@ router.post("/login", (req, res, next) => {
           username,
           email,
           role,
-          reviews
+          reviews,
         } = foundUser;
 
         // Create an object that will be set as the token payload
@@ -140,16 +148,16 @@ router.post("/login", (req, res, next) => {
           username,
           email,
           role,
-          reviews
+          reviews,
         };
-        console.log("payload", payload);
+        // console.log("payload", payload);
 
         // Create and sign the token
         const authToken = jwt.sign(payload, process.env.TOKEN_SECRET, {
           algorithm: "HS256",
           expiresIn: "6h",
         });
-        console.log("authToken", authToken);
+        // console.log("authToken", authToken);
         // Send the token as the response
         res.status(200).json({ authToken: authToken });
       } else {
@@ -159,13 +167,11 @@ router.post("/login", (req, res, next) => {
     .catch((err) => res.status(500).json({ message: "Internal Server Error" }));
 });
 
-// GET Verification
+// GET Verification /auth/verify
 router.get("/verify", isAuthenticated, (req, res, next) => {
-  // <== CREATE NEW ROUTE
-
   // If JWT token is valid the payload gets decoded by the
   // isAuthenticated middleware and made available on `req.payload`
-  console.log(`req.payload`, req.payload);
+  // console.log(`req.payload`, req.payload);
 
   // Send back the object with user data
   // previously set as the token payload

@@ -4,16 +4,6 @@ const albumSchema = new Schema({
   albumImage: { type: String },
   albumName: { type: String, required: true },
   artistsNames: [String], // artist page retrieved from spotify API
-  // tracks: [
-  //   {
-  //     type: Schema.Types.ObjectId,
-  //     ref: "Track",
-  //   },
-  // ], tracks (previews) will be retrieved from spotify API
-  // genres: [{
-  //   type: String,
-  //   enum: ["Rock", "Pop", "Electro", "Classical", ""]
-  // }],
   // releaseDate: String,
   reviews: [
     {

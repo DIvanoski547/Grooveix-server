@@ -10,7 +10,7 @@ const { isAuthenticated, isAdmin } = require("../middleware/jwt.middleware");
 //import cloudinary configuration
 const fileUploader = require("../config/cloudinary.config");
 
-//POST route for uploading album image
+//POST route /albums/image-upload for uploading album image
 router.post("/image-upload", fileUploader.single("albumImage"), (req, res, next) => {
   if (!req.file) {
     next(new Error("No file uploaded!"));
@@ -37,8 +37,8 @@ router.post("/", isAuthenticated, isAdmin, (req, res, next) => {
   const { albumImage, albumName, artistsNames } = req.body;
 
   //check if any of the fields are empty
-  if (albumImage === "" || albumName === "" || artistsNames === "") {
-    res.status(400).json({message: "Please fill in the fiels"})
+  if (albumName === "" || artistsNames === "") {
+    res.status(400).json({message: "Please fill in the fields"})
   }
 
   //check if album is already in database
@@ -49,7 +49,7 @@ router.post("/", isAuthenticated, isAdmin, (req, res, next) => {
       return;
     }
     return Album.create({ albumImage, albumName, artistsNames, reviews: [] })
-    .then((response) => res.json(response))
+    .then((createdAlbum) => res.status(200).json(createdAlbum))
     .catch((err) => {
       console.log("error while creating album", err);
       res.status(500).json({ message: "error while creating album" });
@@ -93,7 +93,8 @@ router.put("/:albumId", isAuthenticated, isAdmin, (req, res, next) => {
     });
 });
 
-//DELETE Route /albums/:albumId -> delete one specific album
+//DELETE Route /albums/:albumId -> delete one specific album 
+//need to figure out how to remove the reviews in that album from each user
 router.delete(
   "/:albumId",
   isAuthenticated,
@@ -102,7 +103,7 @@ router.delete(
     const { albumId } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(albumId)) {
-      res.status(400).json({ message: "Specified id is not valid" });
+      res.status(400).json({ message: "Specified album id is not valid" });
       return;
     }
 
