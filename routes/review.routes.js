@@ -42,7 +42,7 @@ router.post("/", isAuthenticated, (req, res, next) => {
         { $push: { reviews: newReview._id } },
         { new: true }
       );
-      res.status(200).json(response);
+      res.status(200).json(newReview);
     })
     .catch((err) => {
       console.error("Error adding review", err);
