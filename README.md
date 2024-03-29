@@ -22,7 +22,7 @@ Grooveix is a music blog where you can see new album releases, current popular a
 ## Backlog
 
 Well as said in the introduction the main idea was an music albums e-commerce, so many things stayed in the backlog:
-- Veryfication via email after signing in to 
+- Verification via email after signing in to 
 - Retrieve popular tracks from Spotify API
 - Show preview of album's tracks from Spotify API
 - Add albums to favourites
@@ -143,10 +143,20 @@ module.exports = Review;
 
 ## Server Endpoints
 
-  | Method | Endpoint            | Response (200)                                         | Action                                                       |
+  | Method | Endpoint            | Request Body                                       | Action                                                       |
 | ------ | ------------------- | ------------------------------------------------------ | ------------------------------------------------------------ |
-| `GET`  | `/`                 | [beers]                                                | Get all the beers from the DB                                |
-| `GET`  | `/:id`              | { beer }                                               | Get a single/specific beer                                   |
-| `GET`  | `/random`           | { beer }                                               | Get a random beer from the DB                                |
-| `POST` | `/new`              | { message: "New beer successfully saved to database!"} | Create a new beer (see iteration 7 for fields)               |
-| `GET`  | `/search?q={query}` | [beers]                                                | Search beers by name containing the specified term. Example: `/search?q=lager` query will return all beers with the word lager in their name. |
+| `POST`  | `/signup`                 | { firstName, lastName, username, email, password }                                               | Send data to add new user on database                              |
+| `POST`  | `/login`              | { email, password }                                               | Send credentials to login                                   |
+| `GET`  | `/verify`           |                                               | verify the token to be authenticated                             |
+| `POST` | `/users/profile/image-upload`              |  | upload profile image to be updated              |
+| `GET`  | `/users` |                                               | Retrieve all users from database|
+| `GET`  | `/users/:userId` |                                               | retrieve a specific user by id |
+|`GET`|`/users/profile`||retrieve info of the current authenticated user|
+|`POST`|`/users/profile`|{profileImage}|send file for profile image update|
+|`POST`|`/albums/image-upload`||upload file for album cover|
+|`GET`|`/albums`||retrive all the albums on database|
+|`POST`|`/albums`|{ albumImage, albumName, artistsNames }|send data to create new album on database|
+|`GET`|`/albums/:albumId`||retrive information of a specific album by id|
+|`PUT`|`/albums/:albumId`|{ albumImage, albumName, artistsNames }|send data to update album information|
+|`DELETE`|`/albums/:albumId`||delete album from database|
+|`POST`|`/reviews`|{ albumId, rating, content }|send data to add a new review on database|
