@@ -68,7 +68,10 @@ router.get("/:albumId", isAuthenticated, (req, res, next) => {
   }
 
   Album.findById(albumId)
-    .populate("reviews")
+    .populate({
+      path: "reviews",
+      populate: {path: "username", select: "username"}
+    })
     .then((oneAlbum) => res.status(200).json(oneAlbum))
     .catch((err) => {
       console.log("error while retrieving album", err);
