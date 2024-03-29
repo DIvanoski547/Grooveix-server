@@ -29,8 +29,7 @@ router.post("/", isAuthenticated, (req, res, next) => {
   const user = req.payload._id; // Correct capitalization for _id
 
   Review.create(
-    { username: user, album: albumId, content, rating },
-    { new: true }
+    { username: user, album: albumId, rating, content }
   )
     .then(async (newReview) => {
       await Album.findByIdAndUpdate(
